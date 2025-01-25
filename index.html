@@ -1,0 +1,117 @@
+<!-- ===========================
+    Grant Heath
+    Volunteer Connect Project
+    index.html
+    2025-01-24
+============================ -->
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Home</title>
+
+    <!-- CSS Section -->
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="content/style.css">
+</head>
+<body>
+
+<!-- Bootstrap Nav Bar -->
+<header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" id="mainNavbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-user"></i> Volunteer Connect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="opportunities.html" id="opportunitiesLink"><i class="fa-solid fa-bars"></i> Opportunities</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="events.html"><i class="fa-solid fa-calendar-days"></i> Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html"><i class="fa-solid fa-info"></i> About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html"><i class="fa-regular fa-envelope"></i> Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Main Page Content -->
+<main class="container mt-5 text-center">
+    <h1 class="mb-5">Welcome to Volunteer Connect</h1>
+    <p class="lead">
+        We're thrilled to have you here!
+        Volunteer Connect is a platform for discovering rewarding volunteer opportunities to give back to the community.
+    </p>
+    <p>
+        Whether you're looking to give back, gain experience, or simply connect with like-minded individuals,
+        we've got something for everyone. Explore our site to find your next adventure!
+    </p>
+    <p class="mb-5">Join us on our mission to create a stronger, more connected world through the power of volunteering. Let’s get started!</p>
+
+    <!-- Slideshow Section -->
+    <div id="slideshowid" class="carousel slide small-carousel" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#slideshowid" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#slideshowid" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#slideshowid" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+
+            <!-- images -->
+            <div class="carousel-item active">
+                <img src="images/volunteer.jpeg" class="d-block w-100" alt="...">
+            </div>
+
+            <div class="carousel-item">
+                <img src="images/soupkitchenpicture.jpeg" class="d-block w-100" alt="...">
+            </div>
+
+            <div class="carousel-item">
+                <img src="images/teamworkphoto.jpg" class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <!-- Slideshow Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#slideshowid" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#slideshowid" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Get involved button -->
+    <div class="d-flex justify-content-center mt-5">
+        <button id="get-involved-btn" class="btn btn-primary btn-lg" onclick="location.href='opportunities.html'">
+            Get Involved
+        </button>
+    </div>
+
+</main>
+
+<!-- Scripting Section -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./scripts/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!-- ===========================
+    Grant Heath
+    Volunteer Connect Project
+    opportunities.html
+    2025-01-24
+============================ -->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Meta Information -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Page Title -->
+  <title>Opportunities</title>
+
+  <!-- CSS Section -->
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="content/style.css">
+</head>
+<body>
+
+<header>
+  <!-- Bootstrap Nav Bar -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" id="mainNavbar">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html"><i class="fa-solid fa-user"></i> Volunteer Connect</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Nav links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="opportunities.html" id="opportunitiesLink"><i class="fa-solid fa-bars"></i> Opportunities</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="events.html"><i class="fa-solid fa-calendar-days"></i> Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html"><i class="fa-solid fa-info"></i> About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html"><i class="fa-regular fa-envelope"></i> Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Main content -->
+<main class="container mt-5">
+  <h1 class="mb-5">Volunteer Opportunities</h1>
+  <!-- opportunities-list is populated by opportunities.js -->
+  <div class="row" id="opportunities-list"></div>
+</main>
+
+<!-- Sign-Up Popup (Modal) -->
+<div class="modal fade" id="signUpPopup" tabindex="-1" aria-labelledby="signUpPopupLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signUpPopupLabel">Sign Up for Opportunity</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Sign-Up Form -->
+        <form id="signUpForm">
+          <div class="mb-3">
+            <label for="userName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="userName" required>
+          </div>
+          <div class="mb-3">
+            <label for="userEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="userEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="userRole" class="form-label">Role</label>
+            <select class="form-control" id="userRole" required>
+              <option>Volunteer</option>
+              <option>Team Leader</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripting Section -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="./scripts/opportunities.js"></script>
+<script src="./scripts/app.js"></script>
+</body>
+</html>
