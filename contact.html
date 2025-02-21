@@ -2,8 +2,11 @@
     Grant Heath
     Volunteer Connect Project
     contact.html
-    2025-01-24
+    2025-02-20
+
+    contact page html file
 ============================ -->
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,7 +14,7 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <title>Contact</title>
+  <title>Contact Us</title>
 
   <!-- CSS Section -->
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -20,74 +23,56 @@
 </head>
 <body>
 
-<header>
-  <!-- Bootstrap Nav Bar -->
-  <nav class="navbar navbar-expand-lg bg-body-tertiary" id="mainNavbar">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index.html"><i class="fa-solid fa-user"></i> Volunteer Connect</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <!-- Nav bar links -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="opportunities.html" id="opportunitiesLink"><i class="fa-solid fa-bars"></i> Volunteer Now</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="events.html"><i class="fa-solid fa-calendar-days"></i> Events</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="about.html"><i class="fa-solid fa-info"></i> About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="contact.html"><i class="fa-regular fa-envelope"></i> Contact Us</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
+<!-- header section -->
+<header></header>
 
-<!-- Main Content -->
-<main class="container mb-5">
-  <!-- reused form layout from ICE-1 -->
-  <form class="col-lg-6 col-md-10 col-sm-10 col-12 mb-4" id="contactForm">
-    <!-- Form fields -->
+<!-- Content -->
+<main class="container mt-5">
+  <h1 class="mb-5">Contact Us</h1>
+  <p>Have feedback or questions? Let us know!</p>
+
+  <!-- Feedback Form -->
+  <form id="feedbackForm" class="needs-validation" novalidate>
     <div class="mb-3">
-      <span class="input-group-text">Full Name: </span>
-      <input id="fullName" name="fullName" type="text" class="form-control" aria-describedby="Full Name" aria-label="Full Name" required>
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" name="name" required>
     </div>
     <div class="mb-3">
-      <span class="input-group-text">Contact Number: </span>
-      <input id="contactNumber" name="contactNumber" type="tel" class="form-control" aria-describedby="Contact Number" aria-label="Contact Number" required>
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" name="email" required>
     </div>
     <div class="mb-3">
-      <span class="input-group-text">Email: </span>
-      <input id="emailAddress" name="emailAddress" type="email" class="form-control" aria-describedby="Email Address" aria-label="Email Address" required>
+      <label for="feedback" class="form-label">Feedback</label>
+      <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
     </div>
-    <div class="mb-3">
-      <label for="message" class="input-group-text">Message:</label>
-      <textarea id="message" name="message" class="form-control" aria-describedby="Message Area" aria-label="Message Area" required></textarea>
-    </div>
-    <button id="sendButton" type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Submit</button>
-    <button id="cancelButton" type="reset" class="btn btn-warning"><i class="fa-solid fa-x"></i> Cancel</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 
-  <!-- Validation message element -->
-  <div id="validationMessage" style="display: none; color: red;"></div>
-
-  <!-- Confirmation message element -->
-  <div id="confirmationMessage" style="display: none; color: green;"></div>
+  <!-- Confirmation Modal -->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModalLabel">Feedback Submitted</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Name:</strong> <span id="modalName"></span></p>
+          <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+          <p><strong>Feedback:</strong> <span id="modalFeedback"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
-<!-- Scripting Section -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Scripts Section -->
 <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="./scripts/contact.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="./scripts/app.js"></script>
+<script src="scripts/feedback.js"></script> <!-- Include feedback.js script -->
 </body>
 </html>

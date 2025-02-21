@@ -1,0 +1,20 @@
+{
+  "photos": [
+    {
+      "url": "images/event_photo_gallery_1.jpg",
+      "title": "Event Photo 1"
+    },
+    {
+      "url": "images/event_photo_gallery_2.jpg",
+      "title": "Event Photo 2"
+    },
+    {
+      "url": "images/event_photo_gallery_3.jpg",
+      "title": "Event Photo 3"
+    },
+    {
+      "url": "images/event_photo_gallery_4.jpg",
+      "title": "Event Photo 4"
+    }
+  ]
+}

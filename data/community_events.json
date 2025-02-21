@@ -1,0 +1,67 @@
+{
+  "opportunities": [
+    {
+      "title": "Tree Planting Event",
+      "description": "Join us planting trees in the park!",
+      "dateTime": "March 1st, 2025, 10:30 AM",
+      "address": "589 Water St, Whitby, ON L1N 9V9",
+      "category": "Workshops"
+    },
+    {
+      "title": "Soup Kitchen Help",
+      "description": "Help prep, cook, and clean up for dinner.",
+      "dateTime": "March 22, 2025, 5:00 PM",
+      "address": "575 Rossland Rd E, Whitby, ON L1N 2M8",
+      "category": "Workshops"
+    },
+    {
+      "title": "Beach Cleanup",
+      "description": "Help clean up the beach.",
+      "dateTime": "March 25, 2025, 9:00 AM",
+      "address": "623 Halls Rd S, Whitby, ON L1P 2B3",
+      "category": "Cleanups"
+    },
+    {
+      "title": "Halloween Charity Event in the Park",
+      "description": "We are running a charity event in the park to raise donations for Ronald McDonald House. All volunteers are encouraged to come in costume. We are looking for Cooks, Actors, Greeters, and anyone willing to help with cleanup after.",
+      "dateTime": "October 31, 2025, 8:00 PM",
+      "address": "589 Water St, Whitby, ON L1N 9V9",
+      "category": "Fundraisers"
+    },
+    {
+      "title": "Highway Cleanup",
+      "description": "Help clean up the highway.",
+      "dateTime": "February 17, 2025, 9:00 AM",
+      "address": "575 Rossland Rd E, Whitby, ON L1N 2M8",
+      "category": "Cleanups"
+    },
+    {
+      "title": "Cancer Research Fundraiser at DC Whitby Campus",
+      "description": "Come to Durham College's cancer research fundraiser where we will have games, food trucks, and more!",
+      "dateTime": "February 24, 2025, 5:00 PM",
+      "address": "1610 Champlain Ave, Whitby, ON L1N 6A7",
+      "category": "Fundraisers"
+    },
+    {
+      "title": "Local Library Book Sale",
+      "description": "Assist with setting up, organizing, and selling books at the annual library book sale.",
+      "dateTime": "March 5, 2025, 12:00 PM",
+      "address": "405 Dundas St W, Whitby, ON L1N 6A1",
+      "category": "Fundraisers"
+    },
+    {
+      "title": "Community Garden Project",
+      "description": "Help plant and maintain the community garden, and learn about sustainable gardening practices.",
+      "dateTime": "March 15, 2025, 11:00 AM",
+      "address": "233 Brock St N, Whitby, ON L1N 4H2",
+      "category": "Workshops"
+    },
+    {
+      "title": "Animal Shelter Volunteering",
+      "description": "Spend time caring for animals, cleaning enclosures, and assisting with adoption events.",
+      "dateTime": "March 20, 2025, 9:30 AM",
+      "address": "8120 Baldwin St N, Whitby, ON L1M 1Y7",
+      "category": "Workshops"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "users" : [
+    {
+      "DisplayName" : "FirstName LastName",
+      "EmailAddress" : "test@durhumcollege.ca",
+      "UserName": "username",
+      "Password": "password"
+    } ,
+    {
+      "DisplayName" : "Bruce Wayne",
+      "EmailAddress" : "BruceWayne@durhumcollege.ca",
+      "UserName": "batman",
+      "Password": "123"
+    },
+    {
+      "DisplayName" : "Peter Parker",
+      "EmailAddress" : "PParkern@durhumcollege.ca",
+      "UserName": "spiderman",
+      "Password": "12345"
+    },
+    {
+      "DisplayName" : "admin",
+      "EmailAddress" : "admin@durhumcollege.ca",
+      "UserName": "admin",
+      "Password": "password"
+    }
+  ]
+}

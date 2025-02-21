@@ -1,40 +1,46 @@
 <!-- ===========================
     Grant Heath
     Volunteer Connect Project
-    donate.html
+    gallery.html
     2025-02-20
 
-    The page for donation collection
+    The gallery page which shows images,
+    the links to the images are accessed in gallery.js, which uses event_photos.json
 ============================ -->
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Donate</title>
+
+  <title>Gallery</title>
 
   <!-- CSS Section -->
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
   <link rel="stylesheet" href="content/style.css">
+
 </head>
 <body>
 
-<!-- Bootstrap Nav Bar -->
-<header>
-
-</header>
+<!-- Header Container -->
+<header id="mainNavbarContainer"></header>
 
 <!-- Main Content -->
-<main class="container mt-5">
-  <h1 class="mb-5">Support Volunteer Connect</h1>
-  <p>Your donations help us continue our mission to connect volunteers with meaningful opportunities. Thank you for your support!</p>
-</main>
+<div class="container mt-5">
+  <h1 class="mb-5">Event Gallery</h1>
+  <div class="row" id="gallery"></div>
+</div>
 
 <!-- Scripting Section -->
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="./scripts/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+<script src="/scripts/gallery.js"></script>
+<script src="/scripts/app.js"></script>
+
 </body>
 </html>

@@ -1,32 +1,109 @@
 /*********************
  *     Grant Heath
+ *     Student ID: 100925634
+ *     Date Completed: 2025-02-19
+ *
  *     Volunteer Connect Project
  *     app.js
- *     2025-01-24
+ *
+ *     Main js file Volunteer Connect site
  *********************/
 "use strict";
 
-// IIFE - Immediately Invoked Functional Expression
 (function () {
 
     /**
-     * Function to add the dynamic changes to nav bar
-     * this function adds donate link, and changes opportunities tab to volunteer now
+     * Define the handleLogin function
+     */
+    function handleLogin() {
+        const userName = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const messageArea = document.getElementById('messageArea');
+
+        console.log('Entered UserName:', userName); // Debug: log entered userName
+        console.log('Entered Password:', password); // Debug: log entered password
+
+        const user = users.find(user => user.userName === userName && user._password === password);
+
+        if (user) {
+            localStorage.setItem('loggedInUser', JSON.stringify(user.toJSON()));
+            console.log('User logged in:', user.toJSON()); // Debug: log user logged in
+            messageArea.innerHTML = `<div class="alert alert-success">Welcome, ${user.displayName}!</div>`;
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000); // Redirect after 2 seconds
+        } else {
+            messageArea.innerHTML = '<div class="alert alert-danger">Invalid username or password</div>';
+        }
+    }
+
+    /**
+     * Defines the handleLogout function
+     */
+    function handleLogout() {
+        localStorage.removeItem('loggedInUser');
+        console.log('User logged out'); // Debug: log user logged out
+        updateLoginLogoutButton();
+        window.location.href = 'index.html';
+    }
+
+    /**
+     * Defines the updateLoginLogoutButton function
+     */
+    function updateLoginLogoutButton() {
+        const loginButton = document.getElementById('login');
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        console.log('Logged in user:', loggedInUser); // Debug: log loggedInUser
+        console.log('Login Button before update:', loginButton.innerHTML); // Debug: log button state before update
+
+        if (loggedInUser) {
+            console.log('Setting login button to Logout'); // Debug: log changing button to Logout
+            loginButton.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Logout';
+            loginButton.href = '#';
+            loginButton.removeEventListener('click', handleLogin);
+            loginButton.addEventListener('click', handleLogout);
+        } else {
+            console.log('Setting login button to Login'); // Debug: log changing button to Login
+            loginButton.innerHTML = '<i class="fa-solid fa-sign-in-alt"></i> Login';
+            loginButton.href = 'login.html';
+        }
+
+        console.log('Login Button after update:', loginButton.innerHTML); // Debug: log button state after update
+    }
+
+    /**
+     * Dynamically loads the header
+     * @returns {Promise<void>}
+     */
+    async function loadHeader() {
+        console.log("[INFO] Loading header...");
+        try {
+            const response = await fetch("header.html");
+            document.querySelector("header").innerHTML = await response.text();
+            addDynamicNavbarFeatures();
+            highlightActivePage();
+            updateLoginLogoutButton(); // Call after the header is loaded
+            console.log("Header loaded");
+        } catch (error) {
+            console.error("[Error] issue loading header", error);
+        }
+    }
+
+    /**
+     * Dynamically adding features to navbar, donate button and changing opportunities text
      */
     function addDynamicNavbarFeatures() {
-        // Creates donation tab unless your currently on donate, this prevents it from duplicating
         if (document.title !== "Donate") {
             const donateLink = '<li class="nav-item donate-link"><a class="nav-link" href="donate.html"><i class="fa-solid fa-donate"></i> Donate</a></li>';
             const navbarNav = $('#mainNavbar .navbar-nav');
             navbarNav.append(donateLink);
         }
-
-        // Change "Opportunities" tab to "Volunteer Now."
-        $('#opportunitiesLink').text('Volunteer Now.');
+        $('#opportunitiesLink').text('Volunteer Now');
     }
 
     /**
-     * highlights the active page with a grey background
+     * Highlights the active tab in the nav bar
      */
     function highlightActivePage() {
         const currentPath = window.location.pathname.split("/").pop();
@@ -37,26 +114,11 @@
             } else {
                 $(this).removeClass('active');
             }
-            //when class is set to active, style.css turns tab background to grey and text to white
         });
     }
 
     /**
-     * Function to handle contact form submissions
-     */
-    function displayContactPage() {
-        let sendButton = document.getElementById("sendButton");
-        sendButton.addEventListener("click", function () {
-            let contact = new Contact(fullName.value, contactNumber.value, emailAddress.value);
-            if (contact.serialize()) {
-                const key = `contact_${Date.now()}`;
-                localStorage.setItem(key, contact.serialize());
-            }
-        });
-    }
-
-    /**
-     * Function to scroll to the top of the screen, behavior is smooth
+     * Smoothly scrolls back to the top of the page
      */
     function scrollToTop() {
         window.scrollTo({
@@ -66,17 +128,11 @@
     }
 
     /**
-     *Function to create the back to top button
+     * Creates a back to top button if a user scrolls down a certain amount
      */
     function createBackToTopButton() {
-
-        // Creates the actual button
         const button = $('<button id="backToTopBtn" title="Back to Top"><i class="fas fa-chevron-up"></i> Back to Top</button>');
-
-        // Appends button
         $('body').append(button);
-
-        //  CSS styling for button properties, there's also styling in style.css
         button.css({
             display: 'none',
             position: 'fixed',
@@ -93,8 +149,6 @@
             borderRadius: '4px'
         });
 
-        // show/hides button depending on how scrolled user is.
-        // option to scroll to top is only given if they are not at the top
         $(window).scroll(function () {
             if ($(window).scrollTop() > 200) {
                 button.fadeIn();
@@ -103,24 +157,26 @@
             }
         });
 
-        //  when the button is actually clicked, scrollToTop() is ran
         button.click(function () {
             scrollToTop();
         });
     }
 
     /**
-     * on startup function calls all dynamic functions
+     * The Main Function that runs on startup
+     * Its purpose is to load startup features like header and back to top button
      * @constructor
      */
     function Start() {
-        addDynamicNavbarFeatures();
-        highlightActivePage();
+        loadHeader();
         createBackToTopButton();
 
-        if (document.title === "Contact") {
-            displayContactPage();
-        }
+
+        // Redirect to opportunities.html when search bar is focused
+        document.getElementById('searchBar').addEventListener('focus', function() {
+            window.location.href = 'opportunities.html';
+        });
+
     }
 
     window.addEventListener("load", Start);
