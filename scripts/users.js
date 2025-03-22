@@ -1,26 +1,26 @@
 /*********************
  *     Grant Heath
  *     Volunteer Connect Project
- *     users.js
+ *     users.ts
  *     2025-02-20
  *********************/
 "use strict";
-
-
 import { routes } from "./router.js";
 import { Router } from "./router.js";
-
+// Initialize the router
 const router = new Router(routes);
-
-// Define the User class directly in the users.js file
+// Define the User class with TypeScript
 export class User {
+    _displayName;
+    _emailAddress;
+    _userName;
+    _password;
     constructor(displayName = "", emailAddress = "", userName = "", password = "") {
         this._displayName = displayName;
         this._emailAddress = emailAddress;
         this._userName = userName;
         this._password = password;
     }
-
     // Getters and Setters
     get displayName() { return this._displayName; }
     get emailAddress() { return this._emailAddress; }
@@ -28,7 +28,6 @@ export class User {
     set displayName(displayName) { this._displayName = displayName; }
     set emailAddress(emailAddress) { this._emailAddress = emailAddress; }
     set userName(userName) { this._userName = userName; }
-
     // Methods
     toString() {
         return `Display Name: ${this.displayName}\nEmail Address: ${this._emailAddress}\nUserName: ${this._userName}`;
@@ -55,26 +54,25 @@ export class User {
         return null;
     }
     deserialize(data) {
-        let propertyArray = data.split(",");
+        const propertyArray = data.split(",");
         this._displayName = propertyArray[0];
         this._emailAddress = propertyArray[1];
         this._userName = propertyArray[2];
     }
 }
-
 // User initialization
 let users = [];
-
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     fetch('data/users.json')
-        .then(response => response.json())
-        .then(data => {
-            users = data.users.map(user => {
-                let userObj = new User();
-                userObj.fromJSON(user);
-                return userObj;
-            });
-            console.log('Users:', users); // Debug: log users array
-        })
-        .catch(error => console.error('Error fetching users:', error));
+        .then((response) => response.json())
+        .then((data) => {
+        users = data.users.map((user) => {
+            const userObj = new User();
+            userObj.fromJSON(user);
+            return userObj;
+        });
+        console.log('Users:', users); // Debug: log users array
+    })
+        .catch((error) => console.error('Error fetching users:', error));
 });
+//# sourceMappingURL=users.js.map

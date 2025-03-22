@@ -1,22 +1,19 @@
 /*********************
  *     Grant Heath
  *     Volunteer Connect Project
- *     opportunities.js
- *     2025-02-20
+ *     opportunities.ts
+ *     2025-03-22
  *
- *     Populates and animates the opportunities.html page using data from community_events.json and anime.js.
+ *     Populates and animates the opportunities.html page using data from community_events.json and animations from anime.js.
  *********************/
-
-// Load opportunities from JSON file
+"use strict";
 let opportunities = [];
-
 /**
  * Initialize the Opportunities Page
  * This function runs dynamically after the route is loaded.
  */
 function initializeOpportunitiesPage() {
     console.log("[INFO] Initializing Opportunities Page...");
-
     // Inject the location modal (if needed)
     if (!document.getElementById("locationModal")) {
         document.body.innerHTML += `
@@ -40,64 +37,60 @@ function initializeOpportunitiesPage() {
             </div>
         `;
     }
-
     // Get the opportunities list container
     const opportunitiesList = document.getElementById("opportunities-list");
     if (!opportunitiesList) {
         console.error("[ERROR] Element with ID 'opportunities-list' not found!");
         return;
     }
-
     // Fetch data from community_events.json and display it
     fetch('data/community_events.json')
         .then((response) => response.json())
         .then((data) => {
-            opportunities = data.opportunities;
-            displayOpportunities(opportunities);
-        })
+        opportunities = data.opportunities;
+        displayOpportunities(opportunities);
+    })
         .catch((error) => {
-            console.error("[ERROR] Error fetching opportunities:", error);
-        });
-
+        console.error("[ERROR] Error fetching opportunities:", error);
+    });
     // Attach search function to the search bar
     const searchBar = document.getElementById("searchBar");
     if (searchBar) {
         searchBar.addEventListener("input", searchFunction);
-    } else {
+    }
+    else {
         console.error("[ERROR] Search bar with ID 'searchBar' not found!");
     }
-
     // Attach event listener to the sign-up form
     const signUpForm = document.getElementById("signUpForm");
     if (signUpForm) {
         signUpForm.addEventListener("submit", function (event) {
             event.preventDefault();
-            const userName = document.getElementById("userName").value;
-            const userEmail = document.getElementById("userEmail").value;
-            const userRole = document.getElementById("userRole").value;
-
+            const userName = document.getElementById("userName")?.value;
+            const userEmail = document.getElementById("userEmail")?.value;
+            const userRole = document.getElementById("userRole")?.value;
             if (userName && userEmail && userRole) {
                 const popupBody = document.querySelector("#signUpPopup .modal-body");
                 if (popupBody) {
                     popupBody.innerHTML = `<p>Thank you for signing up! You will be redirected to the home page shortly.</p>`;
                 }
                 setTimeout(() => {
-                    // Redirect after submission (Optional)
                     console.log("[INFO] Redirecting to home...");
                 }, 5000);
                 signUpForm.reset();
-            } else {
+            }
+            else {
                 alert("Please fill out all fields.");
             }
         });
-    } else {
+    }
+    else {
         console.error("[ERROR] Sign-up form not found!");
     }
 }
-
 /**
  * Display Opportunities Function
- * @param {Array} filteredOpportunities - List of filtered opportunities
+ * @param filteredOpportunities - List of filtered opportunities
  */
 function displayOpportunities(filteredOpportunities) {
     const opportunitiesList = document.getElementById("opportunities-list");
@@ -106,7 +99,6 @@ function displayOpportunities(filteredOpportunities) {
         return;
     }
     opportunitiesList.innerHTML = ''; // Clear previous results
-
     filteredOpportunities.forEach((opportunity) => {
         const card = document.createElement("div");
         card.className = "col-md-4 mb-4 opportunity-card";
@@ -123,7 +115,6 @@ function displayOpportunities(filteredOpportunities) {
         `;
         opportunitiesList.appendChild(card);
     });
-
     // Animate the opportunity cards using Anime.js
     anime({
         targets: '.opportunity-card',
@@ -134,7 +125,6 @@ function displayOpportunities(filteredOpportunities) {
         delay: anime.stagger(100),
     });
 }
-
 /**
  * Search Function
  */
@@ -145,25 +135,22 @@ function searchFunction() {
         return;
     }
     const input = searchBar.value.toUpperCase();
-    const filteredOpportunities = opportunities.filter((opportunity) =>
-        opportunity.title.toUpperCase().includes(input)
-    );
+    const filteredOpportunities = opportunities.filter((opportunity) => opportunity.title.toUpperCase().includes(input));
     displayOpportunities(filteredOpportunities);
 }
-
 /**
  * Set Popup Data Function
- * @param {string} title - The title of the opportunity
+ * @param title - The title of the opportunity
  */
 function setPopupData(title) {
     const popupTitle = document.getElementById("signUpPopupLabel");
     if (popupTitle) {
         popupTitle.textContent = `Sign Up for ${title}`;
-    } else {
+    }
+    else {
         console.error("[ERROR] Popup title element not found!");
     }
 }
-
 /**
  * View Location Function
  * Gets coordinates from OpenCage Geocoder API using the apiKey located in OpenCageGeoCodingAPIKEY.txt file
@@ -174,32 +161,34 @@ function viewLocation(address) {
     fetch('data/OpenCageGeoCodingAPIKEY')
         .then((response) => response.text())
         .then((apiKey) => {
-            return fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`);
-        })
+        return fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`);
+    })
         .then((response) => response.json())
         .then((data) => {
-            if (data.results && data.results[0]?.geometry) {
-                const { lat, lng } = data.results[0].geometry;
-                const coordinates = `Latitude: ${lat}, Longitude: ${lng}`;
-                const modalBody = document.getElementById('locationModalBody');
-                if (modalBody) {
-                    modalBody.innerHTML = `<p>Address: ${address}</p><p>Coordinates: ${coordinates}</p>`;
-                }
-                const locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
-                locationModal.show();
-            } else {
-                alert('Error fetching coordinates. Please try again later.');
+        if (data.results && data.results[0]?.geometry) {
+            const { lat, lng } = data.results[0].geometry;
+            const coordinates = `Latitude: ${lat}, Longitude: ${lng}`;
+            const modalBody = document.getElementById('locationModalBody');
+            if (modalBody) {
+                modalBody.innerHTML = `<p>Address: ${address}</p><p>Coordinates: ${coordinates}</p>`;
             }
-        })
-        .catch((error) => {
-            console.error('[ERROR] Error fetching coordinates:', error);
+            const locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
+            locationModal.show();
+        }
+        else {
             alert('Error fetching coordinates. Please try again later.');
-        });
+        }
+    })
+        .catch((error) => {
+        console.error('[ERROR] Error fetching coordinates:', error);
+        alert('Error fetching coordinates. Please try again later.');
+    });
 }
-
-// Listen for route changes to initialize the opportunities page
+// Listen for route changes to initialize the opportunity page
 document.addEventListener("routeLoaded", (event) => {
-    if (event.detail === "/opportunities") {
+    const customEvent = event;
+    if (customEvent.detail === "/opportunities") {
         initializeOpportunitiesPage();
     }
 });
+//# sourceMappingURL=opportunities.js.map

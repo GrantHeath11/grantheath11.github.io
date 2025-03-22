@@ -9,7 +9,12 @@
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@popperjs/core": "^2.11.8",
+    "@types/bootstrap": "^5.2.10",
     "animejs": "^3.2.2",
-    "bootstrap": "^5.3.3"
+    "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.8"
+  },
+  "devDependencies": {
+    "@types/chart.js": "^2.9.41"
   }
 }

@@ -18,9 +18,7 @@
     "alwaysStrict": true,
     "noImplicitReturns": true,
     "resolveJsonModule": true,         // Allow importing .json files
-    "outDir": "./dist",                // Output folder for compiled files
-    "rootDir": "./scripts",            // Input folder for TypeScript files
-    "lib": ["ESNext", "DOM"]
+
 
   },
   "exclude": ["node_modules"]          // Exclude the node_modules folder

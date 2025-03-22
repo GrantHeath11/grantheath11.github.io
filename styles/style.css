@@ -2,7 +2,9 @@
  *     Grant Heath
  *     Volunteer Connect Project
  *     style.css
- *     2025-01-24
+ *     2025-03-21
+
+ Almost all styling in here was done by Microsoft CoPilot to make everything consistent and look good
  *********************/
 
 .small-carousel {
@@ -116,3 +118,12 @@
     color: #555;
 }
 
+.error {
+    border: 2px solid red;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 4px;
+}
