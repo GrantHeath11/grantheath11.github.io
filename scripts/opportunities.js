@@ -2,7 +2,7 @@
  *     Grant Heath
  *     Volunteer Connect Project
  *     opportunities.js
- *     2025-02-19
+ *     2025-02-20
  *
  *     Populates and animates the opportunities.html page using data from community_events.json and anime.js.
  *********************/
@@ -11,109 +11,105 @@
 let opportunities = [];
 
 /**
- * function that is executed when the dom is loaded
+ * Initialize the Opportunities Page
+ * This function runs dynamically after the route is loaded.
  */
-document.addEventListener("DOMContentLoaded", function() {
-    document.body.innerHTML += `
-        <!-- Modal -->
-        <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-              <!-- location popup -->
-                <h5 class="modal-title" id="locationModalLabel">Location Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body" id="locationModalBody">
-                <!-- Location details will be populated here -->
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+function initializeOpportunitiesPage() {
+    console.log("[INFO] Initializing Opportunities Page...");
+
+    // Inject the location modal (if needed)
+    if (!document.getElementById("locationModal")) {
+        document.body.innerHTML += `
+            <!-- Modal -->
+            <div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <!-- location popup -->
+                    <h5 class="modal-title" id="locationModalLabel">Location Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body" id="locationModalBody">
+                    <!-- Location details will be populated here -->
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-    `;
+        `;
+    }
 
-    // Get the HTML element where the opportunities will be displayed
+    // Get the opportunities list container
     const opportunitiesList = document.getElementById("opportunities-list");
+    if (!opportunitiesList) {
+        console.error("[ERROR] Element with ID 'opportunities-list' not found!");
+        return;
+    }
 
-    // Fetch data from community_events.json
+    // Fetch data from community_events.json and display it
     fetch('data/community_events.json')
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
             opportunities = data.opportunities;
             displayOpportunities(opportunities);
-
-            // Perform search if there's a query in the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const query = urlParams.get('query');
-            if (query) {
-                document.getElementById('searchBar').value = query;
-                searchFunction();
-            }
         })
-        .catch(error => console.error('Error fetching opportunities:', error));
+        .catch((error) => {
+            console.error("[ERROR] Error fetching opportunities:", error);
+        });
 
     // Attach search function to the search bar
-    document.getElementById('searchBar').addEventListener('input', searchFunction);
+    const searchBar = document.getElementById("searchBar");
+    if (searchBar) {
+        searchBar.addEventListener("input", searchFunction);
+    } else {
+        console.error("[ERROR] Search bar with ID 'searchBar' not found!");
+    }
 
-});
+    // Attach event listener to the sign-up form
+    const signUpForm = document.getElementById("signUpForm");
+    if (signUpForm) {
+        signUpForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const userName = document.getElementById("userName").value;
+            const userEmail = document.getElementById("userEmail").value;
+            const userRole = document.getElementById("userRole").value;
 
-
-/**
- * Defines the viewLocation function
- * Gets coordinates from OpenCage Geocoder API using the apiKey which is located in OpenCageGeoCodingAPIKEY.txt file
- * @param address
- */
-function viewLocation(address) {
-    console.log("Function triggered with address:", address);
-    // Fetch the API key from OpenCageGeoCodingAPIKEY.txt file
-    fetch('data/OpenCageGeoCodingAPIKEY')
-        .then(response => response.text())
-        .then(apiKey => {
-            console.log("API Key:", apiKey);
-            // Fetch coordinates using OpenCage Geocoder API
-            fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.results && data.results[0] && data.results[0].geometry) {
-                        const {lat, lng} = data.results[0].geometry;
-                        const coordinates = `Latitude: ${lat}, Longitude: ${lng}`;
-                        // Populate the modal body with address and coordinates
-                        const modalBody = document.getElementById('locationModalBody');
-                        modalBody.innerHTML = `<p>Address: ${address}</p><p>Coordinates: ${coordinates}</p>`;
-                        // Show the modal
-                        const locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
-                        locationModal.show();
-                    } else {
-                        console.error('Error: Invalid data received from OpenCage API', data);
-                        alert('Error fetching coordinates. Please try again later.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching coordinates:', error);
-                    alert('Error fetching coordinates. Please try again later.');
-                });
-        })
-        .catch(error => {
-            console.error('Error fetching API key:', error);
-            alert('Error fetching API key. Please try again later.');
+            if (userName && userEmail && userRole) {
+                const popupBody = document.querySelector("#signUpPopup .modal-body");
+                if (popupBody) {
+                    popupBody.innerHTML = `<p>Thank you for signing up! You will be redirected to the home page shortly.</p>`;
+                }
+                setTimeout(() => {
+                    // Redirect after submission (Optional)
+                    console.log("[INFO] Redirecting to home...");
+                }, 5000);
+                signUpForm.reset();
+            } else {
+                alert("Please fill out all fields.");
+            }
         });
+    } else {
+        console.error("[ERROR] Sign-up form not found!");
+    }
 }
 
 /**
- * Function to display opportunities on the page
+ * Display Opportunities Function
  * @param {Array} filteredOpportunities - List of filtered opportunities
  */
 function displayOpportunities(filteredOpportunities) {
     const opportunitiesList = document.getElementById("opportunities-list");
+    if (!opportunitiesList) {
+        console.error("[ERROR] Opportunities list container not found!");
+        return;
+    }
     opportunitiesList.innerHTML = ''; // Clear previous results
 
-    filteredOpportunities.forEach(opportunity => {
+    filteredOpportunities.forEach((opportunity) => {
         const card = document.createElement("div");
-        card.className = "col-md-4 mb-4 opportunity-card"; // Bootstrap classes for layout and margin
-        // HTML for card layout
+        card.className = "col-md-4 mb-4 opportunity-card";
         card.innerHTML = `
             <div class="card">
                 <div class="card-body">
@@ -125,68 +121,85 @@ function displayOpportunities(filteredOpportunities) {
                 </div>
             </div>
         `;
-        // Append the card to the opportunity list
         opportunitiesList.appendChild(card);
     });
 
-    // Animate the opportunity cards when loaded using Anime.js
+    // Animate the opportunity cards using Anime.js
     anime({
         targets: '.opportunity-card',
-        opacity: [0, 1], // Fade in effect
-        translateY: [-50, 0], // Slide up effect
-        duration: 1000, // Animation duration in milliseconds
-        easing: 'easeOutQuad', // Easing function
-        delay: anime.stagger(100) // Stagger the animation for each card
+        opacity: [0, 1],
+        translateY: [-50, 0],
+        duration: 1000,
+        easing: 'easeOutQuad',
+        delay: anime.stagger(100),
     });
 }
 
 /**
- * Search function to filter opportunities based on user input
+ * Search Function
  */
 function searchFunction() {
-    const input = document.getElementById('searchBar').value.toUpperCase();
-    const filteredOpportunities = opportunities.filter(opportunity =>
+    const searchBar = document.getElementById("searchBar");
+    if (!searchBar) {
+        console.error("[ERROR] Search bar not found!");
+        return;
+    }
+    const input = searchBar.value.toUpperCase();
+    const filteredOpportunities = opportunities.filter((opportunity) =>
         opportunity.title.toUpperCase().includes(input)
     );
     displayOpportunities(filteredOpportunities);
 }
 
 /**
- * Function to set the title of the sign-up popup with the opportunity title
+ * Set Popup Data Function
  * @param {string} title - The title of the opportunity
  */
 function setPopupData(title) {
     const popupTitle = document.getElementById("signUpPopupLabel");
-    popupTitle.textContent = `Sign Up for ${title}`;
+    if (popupTitle) {
+        popupTitle.textContent = `Sign Up for ${title}`;
+    } else {
+        console.error("[ERROR] Popup title element not found!");
+    }
 }
 
 /**
- * Sign up form submission validation
- * @type {HTMLElement}
+ * View Location Function
+ * Gets coordinates from OpenCage Geocoder API using the apiKey located in OpenCageGeoCodingAPIKEY.txt file
+ * @param address
  */
-const signUpForm = document.getElementById("signUpForm");
-signUpForm.addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent the form from submitting the traditional way
+function viewLocation(address) {
+    console.log("[INFO] Fetching coordinates for address:", address);
+    fetch('data/OpenCageGeoCodingAPIKEY')
+        .then((response) => response.text())
+        .then((apiKey) => {
+            return fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(address)}&key=${apiKey}`);
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.results && data.results[0]?.geometry) {
+                const { lat, lng } = data.results[0].geometry;
+                const coordinates = `Latitude: ${lat}, Longitude: ${lng}`;
+                const modalBody = document.getElementById('locationModalBody');
+                if (modalBody) {
+                    modalBody.innerHTML = `<p>Address: ${address}</p><p>Coordinates: ${coordinates}</p>`;
+                }
+                const locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
+                locationModal.show();
+            } else {
+                alert('Error fetching coordinates. Please try again later.');
+            }
+        })
+        .catch((error) => {
+            console.error('[ERROR] Error fetching coordinates:', error);
+            alert('Error fetching coordinates. Please try again later.');
+        });
+}
 
-    // Get form values
-    const userName = document.getElementById("userName").value;
-    const userEmail = document.getElementById("userEmail").value;
-    const userRole = document.getElementById("userRole").value;
-
-    // Simple form validation
-    if (userName && userEmail && userRole) {
-        // Display a thank-you message directly in the form
-        const popupBody = document.querySelector("#signUpPopup .modal-body");
-        popupBody.innerHTML = `<p>Thank you for signing up! You will be redirected to the home page shortly.</p>`;
-
-        // Redirect to the home page after 5 seconds
-        setTimeout(function() {
-            window.location.href = "index.html"; // Redirect to home page
-        }, 5000); // 5000 milliseconds = 5 seconds
-
-        // Hide the form
-        signUpForm.reset(); // Reset the form fields
-    } else {
-        alert("Please fill out all fields."); // Alert if any fields are empty
+// Listen for route changes to initialize the opportunities page
+document.addEventListener("routeLoaded", (event) => {
+    if (event.detail === "/opportunities") {
+        initializeOpportunitiesPage();
     }
 });

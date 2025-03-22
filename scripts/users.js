@@ -2,14 +2,18 @@
  *     Grant Heath
  *     Volunteer Connect Project
  *     users.js
- *     2025-02-19
- *
- *     users.js defines the user class, using the users.json file to store its users.
+ *     2025-02-20
  *********************/
 "use strict";
 
+
+import { routes } from "./router.js";
+import { Router } from "./router.js";
+
+const router = new Router(routes);
+
 // Define the User class directly in the users.js file
-class User {
+export class User {
     constructor(displayName = "", emailAddress = "", userName = "", password = "") {
         this._displayName = displayName;
         this._emailAddress = emailAddress;
@@ -58,6 +62,7 @@ class User {
     }
 }
 
+// User initialization
 let users = [];
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -72,40 +77,4 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Users:', users); // Debug: log users array
         })
         .catch(error => console.error('Error fetching users:', error));
-
-    const loginButton = document.getElementById('loginButton');
-    const cancelButton = document.getElementById('cancelButton');
-
-    loginButton.addEventListener('click', handleLogin);
-    cancelButton.addEventListener('click', handleCancel);
 });
-
-/**
- * Function to let the user log in using their username and password
- */
-function handleLogin() {
-    const userName = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const messageArea = document.getElementById('messageArea');
-
-    const user = users.find(user => user.userName === userName && user._password === password);
-
-    if (user) {
-        localStorage.setItem('loggedInUser', JSON.stringify(user.toJSON()));
-        console.log('User logged in:', user.toJSON()); // Debug: log user logged in
-        messageArea.innerHTML = `<div class="alert alert-success">Welcome, ${user.displayName}!</div>`;
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 2000); // Redirect after 2 seconds
-    } else {
-        messageArea.innerHTML = '<div class="alert alert-danger">Invalid username or password</div>';
-    }
-}
-
-function handleCancel() {
-    // Clear form fields
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    // Clear message area
-    document.getElementById('messageArea').innerHTML = '';
-}

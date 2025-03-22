@@ -1,0 +1,28 @@
+<div id="eventsPage">
+  <h1>Event Planning</h1>
+
+  <!-- Event Form -->
+  <form id="eventForm">
+    <label for="eventTitle">Event Title:</label>
+    <input type="text" id="eventTitle" name="eventTitle" required>
+
+    <label for="eventDateTime">Date & Time:</label>
+    <input type="datetime-local" id="eventDateTime" name="eventDateTime" required>
+
+    <label for="eventAddress">Address:</label>
+    <input type="text" id="eventAddress" name="eventAddress" required>
+
+    <label for="eventCategory">Category:</label>
+    <select id="eventCategory" name="eventCategory" required>
+      <option value="Workshops">Workshops</option>
+      <option value="Cleanups">Cleanups</option>
+      <option value="Fundraisers">Fundraisers</option>
+    </select>
+
+    <label for="eventDescription">Description:</label>
+    <textarea id="eventDescription" name="eventDescription" rows="4" required></textarea>
+
+    <button type="submit">Create Event</button>
+  </form>
+
+</div>

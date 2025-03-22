@@ -2,73 +2,104 @@
  *     Grant Heath
  *     Volunteer Connect Project
  *     events.js
- *     2025-02-19
+ *     2025-02-20
  *
  *     Populates the Calendar in events.html using community_events.json for its data file
  *********************/
 
-$(document).ready(function() {
+function initializeEventsPage() {
+    console.log("[INFO] Initializing Events Page...");
 
     /**
-     * Saves variable today to the current date, using ISO format for the calendar (YYYY-MM-DD)
+     * Current date in ISO format (YYYY-MM-DD)
      * @type {string}
      */
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
 
     /**
-     * Function to fetch and display events based on selected category
+     * Fetch and display events based on selected category
      * @param {string} category - The selected category to filter events
      */
     function fetchAndDisplayEvents(category) {
-        // Fetch data from community_events.json
-        fetch('data/community_events.json')
-            .then(response => response.json())
-            .then(data => {
-                // Format the opportunities so they fit into the FullCalendar calendar.
+        fetch("data/community_events.json")
+            .then((response) => response.json())
+            .then((data) => {
                 const events = data.opportunities
-                    .filter(opportunity => category === 'all' || opportunity.category === category)
-                    .map(opportunity => {
+                    .filter((opportunity) => category === "all" || opportunity.category === category)
+                    .map((opportunity) => {
+                        // Convert dateTime to ISO 8601 format
                         const dateTime = new Date(opportunity.dateTime);
-                        // Convert the dateTime to ISO 8601 format using Moment.js
-                        const ISO_FormattedDate = moment(dateTime).format('YYYY-MM-DDTHH:mm:ss');
-                        // Create an event object for each opportunity
+                        if (isNaN(dateTime)) {
+                            console.error(`[ERROR] Invalid dateTime: ${opportunity.dateTime}`);
+                            return null; // Skip invalid events
+                        }
+
                         return {
                             title: opportunity.title,
-                            start: ISO_FormattedDate,
+                            start: dateTime.toISOString(), // Convert to ISO format
                             description: opportunity.description,
-                            category: opportunity.category
+                            category: opportunity.category,
                         };
-                    });
+                    })
+                    .filter(event => event !== null); // Remove invalid events
 
-                // Destroy the existing calendar and initialize the fullCalendar with the fetched events
-                $('#calendar').fullCalendar('destroy'); // Destroy the existing calendar
+                console.log("[DEBUG] Events to be rendered:", events); // Debug log
 
-                $('#calendar').fullCalendar({
-                    // Nav buttons and view options formatting
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'month,agendaWeek,agendaDay'
+                const calendarEl = document.getElementById("calendar");
+                if (!calendarEl) {
+                    console.error("[ERROR] Calendar element not found!");
+                    return;
+                }
+
+                // Destroy and reinitialize the calendar
+                if (calendarEl._fullCalendarInstance) {
+                    calendarEl._fullCalendarInstance.destroy();
+                }
+
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: "dayGridMonth",
+                    headerToolbar: {
+                        left: "prev,next today",
+                        center: "title",
+                        right: "dayGridMonth,timeGridWeek,timeGridDay",
                     },
-                    // Sets the default date to today
-                    defaultDate: today,
-                    // Enables navigation links for day/week/month views
+                    events: events, // Add the formatted events
                     navLinks: true,
-                    events: events, // Use the fetched events here
-                    // Was displaying just time then the first letter for either AM or PM,
-                    // so I specified formatting here:
-                    timeFormat: "h:mm A"
+                    eventTimeFormat: {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        meridiem: "short",
+                    },
                 });
+                calendar.render();
+                calendarEl._fullCalendarInstance = calendar;
+
+                console.log("[INFO] Calendar rendered successfully.");
             })
-            .catch(error => console.error('Error fetching opportunities:', error));
+            .catch((error) => {
+                console.error("[ERROR] Error fetching events data:", error);
+            });
     }
 
-    // Initial fetch and display of events with category 'all'
-    fetchAndDisplayEvents('all');
+
+    // Fetch and display all events initially
+    fetchAndDisplayEvents("all");
 
     // Add event listener to the category filter dropdown
-    $('#event-category').change(function() {
-        const selectedCategory = $(this).val();
-        fetchAndDisplayEvents(selectedCategory);
-    });
+    const categoryDropdown = document.getElementById("event-category");
+    if (categoryDropdown) {
+        categoryDropdown.addEventListener("change", (event) => {
+            const selectedCategory = event.target.value;
+            fetchAndDisplayEvents(selectedCategory);
+        });
+    } else {
+        console.error("[ERROR] Event category dropdown not found!");
+    }
+}
+
+// Listen for route changes and initialize the events page dynamically
+document.addEventListener("routeLoaded", (event) => {
+    if (event.detail === "/events") {
+        initializeEventsPage();
+    }
 });

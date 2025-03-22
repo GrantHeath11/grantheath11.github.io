@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",                // Target the latest JavaScript version
+    "module": "ESNext",                // Use the latest module system
+    "moduleResolution": "node",        // Resolve modules like Node.js
+    "esModuleInterop": true,           // Enable CommonJS module compatibility
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,                    // Enable all strict type checks
+    "skipLibCheck": false,             // Check type declarations in libraries
+    "sourceMap": true,                 // Generate source maps
+    "removeComments": false,           // Preserve comments in output
+    "noImplicitAny": true,             // Prevent implicit 'any' types
+    "strictNullChecks": true,          // Null safety
+    "strictFunctionTypes": true,       // Ensure consistent function arguments
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,         // Allow importing .json files
+    "outDir": "./dist",                // Output folder for compiled files
+    "rootDir": "./scripts",            // Input folder for TypeScript files
+    "lib": ["ESNext", "DOM"]
+
+  },
+  "exclude": ["node_modules"]          // Exclude the node_modules folder
+}

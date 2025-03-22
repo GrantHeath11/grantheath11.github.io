@@ -5,37 +5,12 @@
     2025-02-20
 
     The page for showing the user volunteer opportunities
-    This page uses opportunities.js to create opportunity cards
+    This page uses opportunities.ts to create opportunity cards
 ============================ -->
+<h1 class="mb-5">Volunteer Opportunities</h1>
 
-<!doctype html>
-<html lang="en">
-<head>
-  <!-- Meta Information -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-  <!-- Page Title -->
-  <title>Opportunities</title>
-
-  <!-- CSS Section -->
-  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="content/style.css">
-</head>
-<body>
-
-<header>
-  <!-- Navbar will be included here -->
-</header>
-
-<!-- Main content -->
-<main class="container mt-5">
-  <h1 class="mb-5">Volunteer Opportunities</h1>
-  <!-- opportunities-list is populated by opportunities.js -->
-  <div class="row" id="opportunities-list"></div>
-</main>
+<!-- opportunities-list is populated by opportunities.js -->
+<div class="row" id="opportunities-list"></div>
 
 <!-- Sign-Up Popup (Modal) -->
 <div class="modal fade" id="signUpPopup" tabindex="-1" aria-labelledby="signUpPopupLabel" aria-hidden="true">
@@ -69,12 +44,3 @@
     </div>
   </div>
 </div>
-
-<!-- Scripting Section -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-<script src="./scripts/opportunities.js"></script>
-<script src="./scripts/app.js"></script>
-</body>
-</html>

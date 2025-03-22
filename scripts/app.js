@@ -1,183 +1,229 @@
-/*********************
- *     Grant Heath
- *     Student ID: 100925634
- *     Date Completed: 2025-02-19
- *
- *     Volunteer Connect Project
- *     app.js
- *
- *     Main js file Volunteer Connect site
- *********************/
 "use strict";
 
-(function () {
+import { Router } from "./router.js";
+import { User } from "./users.js";
+import { routes } from "./router.js";
+import {statisticsLogic} from "./statistics.js";
+import {initializeEventPlanning} from "./event-planning.js";
 
-    /**
-     * Define the handleLogin function
-     */
-    function handleLogin() {
-        const userName = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const messageArea = document.getElementById('messageArea');
 
-        console.log('Entered UserName:', userName); // Debug: log entered userName
-        console.log('Entered Password:', password); // Debug: log entered password
 
-        const user = users.find(user => user.userName === userName && user._password === password);
+// Instantiate the Router
+const router = new Router(routes);
 
-        if (user) {
-            localStorage.setItem('loggedInUser', JSON.stringify(user.toJSON()));
-            console.log('User logged in:', user.toJSON()); // Debug: log user logged in
-            messageArea.innerHTML = `<div class="alert alert-success">Welcome, ${user.displayName}!</div>`;
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000); // Redirect after 2 seconds
-        } else {
-            messageArea.innerHTML = '<div class="alert alert-danger">Invalid username or password</div>';
+// Global `users` Array
+let users = [];
+
+/**
+ * Fetch users from the JSON file and initialize the `users` array.
+ */
+async function loadUsers() {
+    try {
+        console.log("[INFO] Fetching users...");
+        const response = await fetch("data/users.json");
+        if (!response.ok) {
+            throw new Error(`[ERROR] Failed to fetch users: ${response.status}`);
         }
+        const data = await response.json();
+        users = data.users.map(userData => {
+            const user = new User();
+            user.fromJSON(userData);
+            return user;
+        });
+        console.log("[INFO] Users loaded:", users); // Debug: Log users
+    } catch (error) {
+        console.error("[ERROR] Issue loading users:", error);
     }
+}
 
-    /**
-     * Defines the handleLogout function
-     */
-    function handleLogout() {
-        localStorage.removeItem('loggedInUser');
-        console.log('User logged out'); // Debug: log user logged out
+/**
+ * Dynamically loads the header.
+ */
+export async function loadHeader() {
+    console.log("[INFO] Loading header...");
+    try {
+        const response = await fetch("views/components/header.html");
+        if (!response.ok) {
+            throw new Error(`[ERROR] Failed to fetch header: ${response.status}`);
+        }
+        document.querySelector("header").innerHTML = await response.text();
         updateLoginLogoutButton();
-        window.location.href = 'index.html';
+        console.log("[INFO] Header loaded successfully.");
+    } catch (error) {
+        console.error("[ERROR] Issue loading header:", error);
+    }
+}
+
+/**
+ * Function to handle user login.
+ */
+function handleLogin() {
+    const userName = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const messageArea = document.getElementById("messageArea");
+
+    const user = users.find(user => user.userName === userName && user._password === password);
+
+    if (user) {
+        console.log("[INFO] User found!");
+        localStorage.setItem("loggedInUser", JSON.stringify(user.toJSON()));
+        messageArea.innerHTML = `<div class="alert alert-success">Welcome, ${user.displayName}!</div>`;
+        setTimeout(() => {
+            router.navigate("/");
+        }, 2000); // Redirect after 2 seconds
+    } else {
+        messageArea.innerHTML = `<div class="alert alert-danger">Invalid username or password</div>`;
+    }
+}
+
+/**
+ * Function to handle cancel button click.
+ */
+function handleCancel() {
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("messageArea").innerHTML = "";
+}
+
+/**
+ * Setup event listeners for the login page.
+ */
+function setupEventListeners() {
+    const loginButton = document.getElementById("loginButton");
+    const cancelButton = document.getElementById("cancelButton");
+
+    console.log("[DEBUG] Checking for login and cancel buttons in DOM...");
+    if (!loginButton) {
+        console.warn("[WARN] Login button is not found");
+        return;
+    }
+    if (!cancelButton) {
+        console.warn("[WARN] Cancel button is not found");
+        return;
     }
 
-    /**
-     * Defines the updateLoginLogoutButton function
-     */
-    function updateLoginLogoutButton() {
-        const loginButton = document.getElementById('login');
-        const loggedInUser = localStorage.getItem('loggedInUser');
+    loginButton.addEventListener("click", () => {
+        console.log("[INFO] Login Button was clicked");
+        handleLogin();
+    });
 
-        console.log('Logged in user:', loggedInUser); // Debug: log loggedInUser
-        console.log('Login Button before update:', loginButton.innerHTML); // Debug: log button state before update
+    cancelButton.addEventListener("click", () => {
+        console.log("[INFO] Cancel Button was clicked");
+        handleCancel();
+    });
+    console.log("[INFO] Event listeners attached for login page.");
+}
 
+/**
+ * Update the login/logout button dynamically.
+ */
+function updateLoginLogoutButton() {
+    const loginButton = document.getElementById("login");
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    console.log(`Logged in user = ${loggedInUser}`);
+
+    if (loginButton) {
         if (loggedInUser) {
-            console.log('Setting login button to Logout'); // Debug: log changing button to Logout
             loginButton.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Logout';
-            loginButton.href = '#';
-            loginButton.removeEventListener('click', handleLogin);
-            loginButton.addEventListener('click', handleLogout);
+            loginButton.href = "#";
+            loginButton.addEventListener("click", handleLogout);
         } else {
-            console.log('Setting login button to Login'); // Debug: log changing button to Login
             loginButton.innerHTML = '<i class="fa-solid fa-sign-in-alt"></i> Login';
-            loginButton.href = 'login.html';
+            loginButton.href = "#/login";
+            loginButton.addEventListener("click", () => {
+                router.navigate("/login");
+            });
+        }
+    } else {
+        console.error("[ERROR] Login button not found in header.");
+    }
+}
+
+/**
+ * Handle user logout.
+ */
+function handleLogout() {
+    localStorage.removeItem("loggedInUser");
+
+    console.log("[INFO] User logged out. local storage cleared.");
+
+    updateLoginLogoutButton();
+    // Redirect to login page
+    location.hash = "/login";
+}
+
+
+/**
+ * Highlights the active page in the navbar.
+ */
+function highlightActivePage() {
+    const currentPath = location.hash.slice(1) || "/";
+    document.querySelectorAll("#mainNavbar .nav-link").forEach(link => {
+        const href = link.getAttribute("href");
+        if (href === `#${currentPath}`) {
+            link.classList.add("active");
+        } else {
+            link.classList.remove("active");
+        }
+    });
+}
+
+/**
+ * The main initialization function.
+ */
+async function Start() {
+    console.log("[INFO] Application Starting...");
+
+    // Load the users
+    await loadUsers();
+
+    // Load the header
+    await loadHeader();
+
+    // Load the initial route content
+    const currentPath = location.hash.slice(1) || "/";
+    router.loadRoute(currentPath);
+
+    // Highlight the active page in the navbar
+    highlightActivePage();
+
+    // Listen for hash changes to dynamically load new routes
+    window.addEventListener("hashchange", () => {
+        const newPath = location.hash.slice(1) || "/";
+        router.loadRoute(newPath);
+        highlightActivePage();
+
+        console.log(`[INFO] Current route: ${newPath}`);
+
+        if (newPath === "/login") {
+            console.log("[DEBUG] Initializing login page from app.js");
+            setTimeout(() => {
+                setupEventListeners();
+            }, 100); // Add delay to ensure content is fully loaded
         }
 
-        console.log('Login Button after update:', loginButton.innerHTML); // Debug: log button state after update
-    }
+        if (newPath === "/statistics") {
+            console.log("[INFO] Initializing statistics page from app.js...");
 
-    /**
-     * Dynamically loads the header
-     * @returns {Promise<void>}
-     */
-    async function loadHeader() {
-        console.log("[INFO] Loading header...");
-        try {
-            const response = await fetch("header.html");
-            document.querySelector("header").innerHTML = await response.text();
-            addDynamicNavbarFeatures();
-            highlightActivePage();
-            updateLoginLogoutButton(); // Call after the header is loaded
-            console.log("Header loaded");
-        } catch (error) {
-            console.error("[Error] issue loading header", error);
+            setTimeout(() => {
+                const canvas = document.getElementById("chart");
+                if (!canvas) {
+                    console.error("[ERROR] Canvas element not found in DOM. Retrying...");
+                    return;
+                }
+                console.log("[INFO] Canvas element found. Initializing statistics logic...");
+                statisticsLogic();
+            }, 100);
         }
-    }
 
-    /**
-     * Dynamically adding features to navbar, donate button and changing opportunities text
-     */
-    function addDynamicNavbarFeatures() {
-        if (document.title !== "Donate") {
-            const donateLink = '<li class="nav-item donate-link"><a class="nav-link" href="donate.html"><i class="fa-solid fa-donate"></i> Donate</a></li>';
-            const navbarNav = $('#mainNavbar .navbar-nav');
-            navbarNav.append(donateLink);
+        if (newPath === "/event-planning") {
+            console.log("[INFO] Initializing event planning page from app.js...");
+            initializeEventPlanning(); // Delegates to event-planning.js
         }
-        $('#opportunitiesLink').text('Volunteer Now');
-    }
+    });
+    // Update the login/logout button state
+    updateLoginLogoutButton();
+}
 
-    /**
-     * Highlights the active tab in the nav bar
-     */
-    function highlightActivePage() {
-        const currentPath = window.location.pathname.split("/").pop();
-        $('#mainNavbar .navbar-nav .nav-link').each(function () {
-            const href = $(this).attr('href');
-            if (href === currentPath) {
-                $(this).addClass('active');
-            } else {
-                $(this).removeClass('active');
-            }
-        });
-    }
-
-    /**
-     * Smoothly scrolls back to the top of the page
-     */
-    function scrollToTop() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }
-
-    /**
-     * Creates a back to top button if a user scrolls down a certain amount
-     */
-    function createBackToTopButton() {
-        const button = $('<button id="backToTopBtn" title="Back to Top"><i class="fas fa-chevron-up"></i> Back to Top</button>');
-        $('body').append(button);
-        button.css({
-            display: 'none',
-            position: 'fixed',
-            bottom: '20px',
-            right: '30px',
-            zIndex: '99',
-            fontSize: '18px',
-            border: 'none',
-            outline: 'none',
-            backgroundColor: 'grey',
-            color: 'white',
-            cursor: 'pointer',
-            padding: '15px',
-            borderRadius: '4px'
-        });
-
-        $(window).scroll(function () {
-            if ($(window).scrollTop() > 200) {
-                button.fadeIn();
-            } else {
-                button.fadeOut();
-            }
-        });
-
-        button.click(function () {
-            scrollToTop();
-        });
-    }
-
-    /**
-     * The Main Function that runs on startup
-     * Its purpose is to load startup features like header and back to top button
-     * @constructor
-     */
-    function Start() {
-        loadHeader();
-        createBackToTopButton();
-
-
-        // Redirect to opportunities.html when search bar is focused
-        document.getElementById('searchBar').addEventListener('focus', function() {
-            window.location.href = 'opportunities.html';
-        });
-
-    }
-
-    window.addEventListener("load", Start);
-})();
+// Initialize the app when DOM is fully loaded
+window.addEventListener("DOMContentLoaded", Start);
